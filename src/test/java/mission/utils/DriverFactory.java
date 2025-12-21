@@ -1,62 +1,43 @@
 package mission.utils;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import mission.base.BasePage;
-
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
 
-import java.text.MessageFormat;
+public class DriverFactory {
 
-public class DriverFactory extends BasePage {
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    public static String browser = null;
-    private static final String CHROME_WIN = "src\\test\\java\\BrowserDirectory\\chromedriver.exe";
-    private static final String EDGE = "src\\test\\java\\BrowserDirectory\\MicrosoftWebDriver.exe";
-    private static final String FIREFOX_WIN = "src\\test\\java\\BrowserDirectory\\geckodriver.exe";
-    private static final String CHROME_MAC = "src/test/java/BrowserDirectory/chromedriver-Mac";
+    private DriverFactory() {
+        // prevent external instantiation
+    }
 
+    public static void initDriver(String browser) {
+        if (driver.get() == null) {
+            switch (browser.toLowerCase()) {
+                case "firefox":
+                    WebDriverManager.firefoxdriver().setup();
+                    driver.set(new FirefoxDriver());
+                    break;
+                case "chrome":
+                default:
+                    WebDriverManager.chromedriver().setup();
+                    driver.set(new ChromeDriver());
+                    break;
+            }
+            driver.get().manage().window().maximize();
+        }
+    }
 
-    /**
-     * Browser property location /src/test/java/TestData/TestData.properties
-     */
+    public static WebDriver getDriver() {
+        return driver.get();
+    }
 
-
-    /**
-     * Function for multi browser
-     */
-    public void selectBrowser() {
-        browser = LoadProp.getProperty("Browser");
-
-        if (browser.equalsIgnoreCase("Chrome")) {
-            //System.setProperty("webdriver.chrome.driver", CHROME_WIN);
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
-        } else if (browser.equalsIgnoreCase("edge")) {
-            //System.setProperty("webdriver.edge.driver", EDGE);
-            WebDriverManager.edgedriver().setup();
-            driver = new EdgeDriver();
-        } else if (browser.equalsIgnoreCase("Firefox")) {
-            WebDriverManager.firefoxdriver().setup();
-            //System.setProperty("webdriver.gecko.driver", FIREFOX_WIN);
-            driver = new FirefoxDriver();
-        } else if (browser.equalsIgnoreCase("chromeMac")) {
-            //System.setProperty("webdriver.chrome.driver", CHROME_MAC);
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
-        } else if (browser.equalsIgnoreCase("chromeHeadless")) {
-            //System.setProperty("webdriver.chrome.driver", CHROME_MAC);
-            ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.addArguments("--headless");
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver(chromeOptions);
-        } else if (browser.equalsIgnoreCase("api")) {
-
-        } else {
-            Assert.fail(MessageFormat.format("Wrong Browser: {0}", browser));
+    public static void quitDriver() {
+        if (driver.get() != null) {
+            driver.get().quit();
+            driver.remove();
         }
     }
 }
