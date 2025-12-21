@@ -1,4 +1,7 @@
-package mission;
+package mission.pages;
+
+import mission.base.BasePage;
+import mission.utils.LoadProp;
 
 public class HomePage extends BasePage {
 

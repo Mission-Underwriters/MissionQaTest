@@ -1,15 +1,17 @@
-package mission;
+package mission.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import mission.base.BasePage;
+
 public class LoadProp extends BasePage {
 
     static Properties prop;
     static FileInputStream input;
-    public static String testData = "/src/test/java/TestData/TestData.properties";
+    public static String testData = "/src/test/resources/testdata/TestData.properties";
 
     private static File currentDirectory = new File(new File("").getAbsolutePath());
 

@@ -1,6 +1,8 @@
-package mission;
+package mission.pages;
 
 import org.openqa.selenium.support.PageFactory;
+
+import mission.base.BasePage;
 
 public class SamplePage extends BasePage {
     public SamplePage() {

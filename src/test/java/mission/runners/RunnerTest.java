@@ -1,4 +1,4 @@
-package mission;
+package mission.runners;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.CucumberFeatureWrapper;

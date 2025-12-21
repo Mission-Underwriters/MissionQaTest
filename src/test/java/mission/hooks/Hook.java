@@ -1,8 +1,12 @@
-package mission;
+package mission.hooks;
 
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import mission.base.BasePage;
+import mission.utils.DriverFactory;
+import mission.utils.LoadProp;
+
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.OutputType;
@@ -16,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Hook extends BasePage {
 
-    BrowserSetup browsersetup = new BrowserSetup();
+    DriverFactory browsersetup = new DriverFactory();
     private static final int WAIT_SEC = 20;
 
 
@@ -27,7 +31,6 @@ public class Hook extends BasePage {
         driver.manage().timeouts().pageLoadTimeout(WAIT_SEC, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(WAIT_SEC, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(WAIT_SEC, TimeUnit.SECONDS);
-        new iniClass();
     }
 
     /**

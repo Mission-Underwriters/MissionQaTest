@@ -1,6 +1,8 @@
-package mission;
+package mission.utils;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import mission.base.BasePage;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -9,7 +11,7 @@ import org.testng.Assert;
 
 import java.text.MessageFormat;
 
-public class BrowserSetup extends BasePage {
+public class DriverFactory extends BasePage {
 
     public static String browser = null;
     private static final String CHROME_WIN = "src\\test\\java\\BrowserDirectory\\chromedriver.exe";
