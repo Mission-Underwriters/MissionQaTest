@@ -1,33 +1,30 @@
 package mission.utils;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 
 public class DriverFactory {
 
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    private DriverFactory() {
-        // prevent external instantiation
-    }
-
     public static void initDriver(String browser) {
-        if (driver.get() == null) {
-            switch (browser.toLowerCase()) {
-                case "firefox":
-                    WebDriverManager.firefoxdriver().setup();
-                    driver.set(new FirefoxDriver());
-                    break;
-                case "chrome":
-                default:
-                    WebDriverManager.chromedriver().setup();
-                    driver.set(new ChromeDriver());
-                    break;
-            }
-            driver.get().manage().window().maximize();
+
+        if (driver.get() != null) {
+            return;
         }
+
+        if (browser.equalsIgnoreCase("chrome")) {
+            driver.set(new ChromeDriver());
+        } else if (browser.equalsIgnoreCase("edge")) {
+            driver.set(new EdgeDriver());
+        } else {
+            throw new RuntimeException("Unsupported browser: " + browser);
+        }
+
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        getDriver().manage().window().maximize();
     }
 
     public static WebDriver getDriver() {
