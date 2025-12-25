@@ -1,31 +1,44 @@
-Feature: Checkout items in the basket
-  Please use home page of https://www.saucedemo.com/
+@ui
+Feature: SauceDemo Login and Checkout tests
 
-  Scenario: Check item total cost and tax
-    Given I am on the home page
-    And I login in with the following details
-      | userName      | Password     |
-      | standard_user | secret_sauce |
+Background:
+	Given I open SauceDemo application
 
-    And I add the following items to the basket
+  #LOGIN VALIDATION
+  Scenario Outline: Login validation for success users
+    When I login with username "<username>" and password "<password>"
+    Then I should see "<status>"
+
+    Examples:
+      | username                | password       | loginResult        |
+      | standard_user           | secret_sauce   | login success      |
+      | problem_user            | secret_sauce   | login success      |
+      | performance_glitch_user | secret_sauce   | login success      |
+      | error_user | secret_sauce   | login success      |
+      | visual_user | secret_sauce   | login success      |
+      | locked_out_user         | secret_sauce   | user locked error  |
+
+  Scenario: Checkout items and verify total and tax
+
+  #CHECKOUT FLOW
+  Scenario: Checkout items and verify total and tax
+    And I login with username "standard_user" and password "secret_sauce"
+
+    And I add the following items to the cart
       | Sauce Labs Backpack      |
       | Sauce Labs Fleece Jacket |
       | Sauce Labs Bolt T-Shirt  |
       | Sauce Labs Onesie        |
 
-    And I  should see 4 items added to the shopping cart
-    And I click on the shopping cart
-    And I verify that the QTY count for each item should be 1
-    And I remove the following item:
-      | Sauce Labs Fleece Jacket |
-    And I  should see 3 items added to the shopping cart
-    And I click on the CHECKOUT button
-    And I type "FirstName" for First Name
-    And I type "LastName" for Last Name
-    And I type "EC1A 9JU" for ZIP/Postal Code
+    Then I should see 4 items in the cart
 
-    When I click on the CONTINUE button
-    Then Item total will be equal to the total of items on the list
-    And a Tax rate of 8 % is applied to the total
+    When I remove item "Sauce Labs Fleece Jacket"
+    Then I should see 3 items in the cart
 
+    When I proceed to checkout
+    And I enter checkout details
+      | firstName | lastName | zipCode |
+      | John      | Doe      | 560001  |
 
+    Then item total should be correct
+    And tax should be calculated as 8 percent

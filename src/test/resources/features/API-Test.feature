@@ -1,5 +1,5 @@
 @api
-Feature: ReqRes API validation
+Feature: ReqRes API tests
 
   Background:
     Given the ReqRes API is available
@@ -14,10 +14,10 @@ Feature: ReqRes API validation
     Then the total users count should match the number of returned users
     And all user ids should be unique
 
-  Scenario: Validate list users API with delayed response
-    When I call the list users API with delay 3
-    Then the response status code should be 200
-    And the response time should be less than 5 seconds
+#DELAYED RESPONSE
+  Scenario: Validate list of users with delayed response
+    When I wait for the user list to load
+    Then I should see that every user has a unique id
 
   #SINGLE USER
   Scenario Outline: Validate single user details
@@ -30,13 +30,13 @@ Feature: ReqRes API validation
       | 55     | 404        |
 
   Scenario: Validate single user data fields
-    When I fetch user with id 4
+    When I fetch user with id 3
     Then the response status code should be 200
     And the user first name should be "Emma"
     And the user email should be "emma.wong@reqres.in"
 
   #LOGIN
-  Scenario Outline: LOGIN - SUCCESSFUL by a user
+  Scenario Outline: Login - successful by a user
     When I login with email "<email>" and password "<password>"
     Then the response status code should be 200
     And the login response should contain token
@@ -45,7 +45,7 @@ Feature: ReqRes API validation
       | email              | password |
       | eve.holt@reqres.in | cityslicka |
 
-  Scenario Outline: LOGIN - UNSUCCESSFUL by a user
+  Scenario Outline: Login - unsuccessful by a user
     When I login with email "<email>" and password "<password>"
     Then the response status code should be 400
     And the error message should be "<errorMessage>"

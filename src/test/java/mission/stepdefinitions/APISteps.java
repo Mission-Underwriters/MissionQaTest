@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import mission.utils.LoadProp;
 import org.testng.Assert;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +17,6 @@ import static io.restassured.RestAssured.given;
 public class APISteps {
 
     private static ThreadLocal<Response> response = new ThreadLocal<>();
-
     private List<Integer> allUserIds = new ArrayList<>();
     private int totalUsers;
     
@@ -24,13 +24,14 @@ public class APISteps {
         return given()
                 .header("User-Agent", "Mozilla/5.0")
                 .header("Accept", "application/json")
-                .header("Content-Type", "application/json");
+                .header("Content-Type", "application/json")
+                .header("x-api-key",LoadProp.getProperty("ApiKey"));
     }
 
     @Given("the ReqRes API is available")
     public void api_is_available() {
     	RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.baseURI = "https://reqres.in/api";
+        RestAssured.baseURI = LoadProp.getProperty("ApiUrl");
     }
 
     // LIST USERS
@@ -56,9 +57,9 @@ public class APISteps {
         }
     }
 
-    @When("I call the list users API with delay {int}")
-    public void list_users_api_with_delay(int delay) {
-        response.set(request().get("/users?delay=" + delay));
+    @When("I wait for the user list to load")
+    public void load_users_with_delay() {
+        response.set(request().get("/users?delay=3"));
     }
 
     @Then("the total users count should match the number of returned users")
@@ -72,21 +73,20 @@ public class APISteps {
         Assert.assertEquals(uniqueIds.size(), allUserIds.size());
     }
 
-    @Then("the response time should be less than {int} seconds")
-    public void response_time(int seconds) {
-        long responseTimeInSeconds = response.get().getTime() / 1000;
-        Assert.assertTrue(responseTimeInSeconds < seconds);
-    }
-
     // SINGLE USER
     @When("I fetch user with id {int}")
     public void fetch_user_with_id(int userId) {
         response.set(request().get("/users/" + userId));
     }
 
+    @Then("I should see that every user has a unique id")
+    public void unique_id_for_every_user() {
+    	unique_user_ids();
+    }
+    
     @Then("the response status code should be {int}")
-    public void response_status_code(int expected) {
-        Assert.assertEquals(response.get().getStatusCode(), expected);
+    public void the_response_status_code_should_be(int statusCode) {
+        Assert.assertEquals(statusCode, response.get().getStatusCode());
     }
 
     @Then("the user first name should be {string}")

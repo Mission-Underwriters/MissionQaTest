@@ -1,31 +1,26 @@
 package mission.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
-import mission.base.BasePage;
+public class LoadProp {
 
-public class LoadProp extends BasePage {
+    private static Properties prop = new Properties();
 
-    static Properties prop;
-    static FileInputStream input;
-    public static String testData = "/src/test/resources/testdata/TestData.properties";
+    static {
+        try (InputStream input = LoadProp.class.getClassLoader().getResourceAsStream("testdata/TestData.properties")) {
+        	
+            if (input == null) {
+                throw new RuntimeException("TestData.properties not found");
+            }
+            prop.load(input);
 
-    private static File currentDirectory = new File(new File("").getAbsolutePath());
-
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load TestData.properties", e);
+        }
+    }
 
     public static String getProperty(String key) {
-        prop = new Properties();
-
-        try {
-            input = new FileInputStream(currentDirectory + testData);
-            prop.load(input);
-            input.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return prop.getProperty(key);
     }
 }

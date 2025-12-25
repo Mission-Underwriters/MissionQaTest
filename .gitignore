@@ -1,6 +1,3 @@
-# =========================
-# Maven / Build Artifacts
-# =========================
 target/
 test-output/
 surefire-reports/
@@ -9,43 +6,27 @@ generated-sources/
 generated-test-sources/
 maven-status/
 
-# =========================
-# Cucumber / Test Reports
-# =========================
+src/test/resources/testdata/TestData.properties
+
 cucumber-reports/
 *.json
 *.html
 
-# =========================
-# IDE - Eclipse
-# =========================
 .classpath
 .project
 .settings/
 .metadata/
 
-# =========================
-# IDE - IntelliJ
-# =========================
 *.iml
 .idea/
 
-# =========================
-# Selenium WebDrivers
-# =========================
 chromedriver*
 geckodriver*
 msedgedriver*
 
-# =========================
-# Screenshots / Logs
-# =========================
 Screenshots/
 screenshots/
 *.log
 
-# =========================
-# OS Files
-# =========================
 .DS_Store
 Thumbs.db

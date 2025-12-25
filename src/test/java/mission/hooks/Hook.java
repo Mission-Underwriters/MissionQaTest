@@ -10,18 +10,13 @@ public class Hook {
 
     @Before
     public void setUp(Scenario scenario) {
-
-        // Start browser only for UI scenarios
         if (scenario.getSourceTagNames().contains("@ui")) {
-            String browser = LoadProp.getProperty("Browser");
-            DriverFactory.initDriver(browser);
+            DriverFactory.initDriver(LoadProp.getProperty("Browser"));
         }
     }
 
     @After
     public void tearDown(Scenario scenario) {
-
-        // Quit browser only for UI scenarios
         if (scenario.getSourceTagNames().contains("@ui")) {
             DriverFactory.quitDriver();
         }
