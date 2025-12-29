@@ -8,16 +8,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
-
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class BrowserSetup {
 
-    public static WebDriver selectBrowser() {
+    @SuppressWarnings("deprecation")
+	public static WebDriver selectBrowser() {
     	WebDriver driver;
         String browser= LoadProp.getProperty("Browser");
         String url= LoadProp.getProperty("url");

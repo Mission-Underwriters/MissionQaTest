@@ -7,7 +7,7 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = {"mission.stepDefs", "mission.hook"},
-        tags= "@ui",
+        tags= "@api",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true
 )

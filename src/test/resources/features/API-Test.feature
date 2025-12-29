@@ -1,3 +1,4 @@
+@api
 Feature: API test
 # Please visit https://reqres.in/
 
@@ -20,18 +21,17 @@ Feature: API test
 
 
   Scenario Outline: CREATE a user
-    Given I create a user with following <Name> <Job>
-    Then response should contain the following data
-      | name | job | id | createdAt |
+  Given I create a user with name "<name>" and job "<job>"
+  Then response should contain the following data
+    | name | job | id | createdAt |
 
-    Examples:
-      | Name  | Job     |
-      | Peter | Manager |
-      | Liza  | Sales   |
-
+Examples:
+  | name  | job     |
+  | Peter | Manager |
+  | Liza  | Sales   |
 
   Scenario: LOGIN - SUCCESSFUL by a user
-    Given I login unsuccessfully with the following data
+    Given I login successfully with the following data
       | Email              | Password   |
       | eve.holt@reqres.in | cityslicka |
     Then I should get a response code of 200
