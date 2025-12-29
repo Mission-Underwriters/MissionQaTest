@@ -1,4 +1,4 @@
-package mission;
+package mission.hook;
 
 import cucumber.api.Scenario;
 import cucumber.api.java.After;

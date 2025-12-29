@@ -1,4 +1,4 @@
-package mission;
+package mission.stepDefs;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
@@ -6,7 +6,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class StepDefinition {
+public class UIStepDefinition {
 
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() {
