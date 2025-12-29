@@ -12,7 +12,7 @@ public class LoadProp {
 	private static final String TESTDATA_PATH = "/src/test/resources/TestData/TestData.properties";
 	private static final File CURRENT_DIR = new File(System.getProperty("user.dir"));
 
-	static String getProperty(String key) {
+	public static String getProperty(String key) {
 		prop = new Properties();
 		try {
 			input = new FileInputStream(CURRENT_DIR + TESTDATA_PATH);

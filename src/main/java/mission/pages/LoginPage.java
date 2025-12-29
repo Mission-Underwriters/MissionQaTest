@@ -1,0 +1,28 @@
+package mission.pages;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+import mission.base.BasePage;
+import mission.utils.WaitUtils;
+
+public class LoginPage extends BasePage {
+	public LoginPage(WebDriver driver) { super(driver); }
+
+    @FindBy(id = "user-name")
+    private WebElement usernameField;
+
+    @FindBy(id = "password")
+    private WebElement passwordField;
+
+    @FindBy(id = "login-button")
+    private WebElement loginButton;
+
+    public void login(String username, String password) {
+    	WaitUtils.waitForElementVisible(driver, usernameField, 10);
+        usernameField.sendKeys(username);
+        passwordField.sendKeys(password);
+        loginButton.click();
+    }
+}
