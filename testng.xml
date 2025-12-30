@@ -1,0 +1,15 @@
+<suite name="BDD Suite" verbose="1">
+
+    <test name="UI-Test feature">
+        <classes>
+            <class name="mission.runner.UIRunnerTest"/>
+        </classes>
+    </test>
+
+    <test name="API-Test feature">
+        <classes>
+            <class name="mission.runner.APIRunnerTest"/>
+        </classes>
+    </test>
+
+</suite>

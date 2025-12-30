@@ -36,17 +36,20 @@ public class APIStepDefinition extends ApiBase {
 
  // ---------------- Login (Reusable) ----------------
     private void performLogin(DataTable credentials) {
-        Map<String, String> creds = credentials.asMap(String.class, String.class);
+        Map<String, String> creds =
+                credentials.asMaps(String.class, String.class).get(0);
+
         Map<String, String> payload = new HashMap<>();
 
-        // Add email if not null
-        if (creds.get("Email") != null && !creds.get("Email").isEmpty()) {
-            payload.put("email", creds.get("Email"));
+        String email = creds.get("Email");
+        if (email != null && !email.trim().isEmpty()) {
+            payload.put("email", email.trim());
         }
 
-        // Add password only if provided
-        if (creds.get("Password") != null && !creds.get("Password").isEmpty()) {
-            payload.put("password", creds.get("Password"));
+        String password = creds.get("Password");
+        if (password != null && !password.trim().isEmpty()
+                && !password.equalsIgnoreCase("[empty]")) {
+            payload.put("password", password.trim());
         }
 
         lastResponse = defaultRequest()
@@ -54,9 +57,9 @@ public class APIStepDefinition extends ApiBase {
                 .when()
                 .post(ApiConstants.LOGIN);
 
+        System.out.println("Login payload: " + payload);
         System.out.println("Response Body: " + lastResponse.getBody().asString());
     }
-
     // ---------------- List Users ----------------
     @Given("I get the default list of users for on 1st page")
     public void get_users_first_page() {
@@ -153,13 +156,19 @@ public class APIStepDefinition extends ApiBase {
     }
 
     @Then("I should get a response code of {int}")
-    public void verify_response_code(int expectedStatusCode) {
-        assertEquals(lastResponse.statusCode(), expectedStatusCode);
+    public void verify_response_code(int expectedCode) {
+        int actualCode = lastResponse.getStatusCode();
+        Assert.assertEquals(actualCode, expectedCode, 
+            "Expected HTTP status code " + expectedCode + " but got " + actualCode);
     }
 
     @Then("I should see the following response message:")
     public void verify_error_message(DataTable expectedMessageTable) {
         String expected = expectedMessageTable.asList().get(0);
+        // Remove "key": if user kept it in the feature file
+        if (expected.contains(":")) {
+            expected = expected.split(":", 2)[1].trim().replaceAll("^\"|\"$", "");
+        }
         assertEquals(lastResponse.jsonPath().getString("error"), expected);
     }
 

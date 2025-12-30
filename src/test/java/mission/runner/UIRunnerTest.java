@@ -7,9 +7,9 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = {"mission.stepDefs", "mission.hook"},
-        tags= "@api",
+        tags= "@ui",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true
 )
 
-public class RunnerTest extends AbstractTestNGCucumberTests { }
+public class UIRunnerTest extends AbstractTestNGCucumberTests { }
