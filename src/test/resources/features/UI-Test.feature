@@ -28,3 +28,9 @@ Feature: Checkout items in the basket
     When I click on the CONTINUE button
     Then Item total will be equal to the total of items on the list
     And a Tax rate of 8 % is applied to the total
+    
+    And the total amount should be equal to item total plus tax
+    And I click on the FINISH button
+    Then I should see the order confirmation message
+    And the checkout should be completed successfully
+    And the shopping cart should be empty

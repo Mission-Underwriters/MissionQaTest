@@ -1,15 +1,15 @@
-<suite name="BDD Suite" verbose="1">
+<suite name="QA Automation Assignment" verbose="1">
 
-    <test name="UI-Test feature">
-        <classes>
-            <class name="mission.runner.UIRunnerTest"/>
-        </classes>
-    </test>
+	<test name="SauceDemo UI-Test feature">
+		<classes>
+			<class name="mission.runner.UIRunnerTest" />
+		</classes>
+	</test>
+	<test name="ReqRes API-Test feature">
+		<classes>
+			<class name="mission.runner.APIRunnerTest" />
+		</classes>
+	</test>
 
-    <test name="API-Test feature">
-        <classes>
-            <class name="mission.runner.APIRunnerTest"/>
-        </classes>
-    </test>
 
 </suite>

@@ -24,7 +24,7 @@ public class LoadProp {
             prop.load(input);
             input.close();
         } catch (IOException e) {
-            System.out.println("Unable to read property file: " + e.getMessage());
+        	throw new RuntimeException("Unable to read property file", e);
         }
         return prop.getProperty(key);
     }

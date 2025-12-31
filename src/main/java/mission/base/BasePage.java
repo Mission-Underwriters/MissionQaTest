@@ -3,7 +3,7 @@ package mission.base;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
-public class BasePage {
+public abstract class BasePage {
     protected WebDriver driver;
 
     public BasePage(WebDriver driver) {
