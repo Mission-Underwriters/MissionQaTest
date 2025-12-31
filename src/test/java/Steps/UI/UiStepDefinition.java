@@ -3,8 +3,6 @@ package Steps.UI;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
 import Pages.*;
-import utils.WaitUtils;
-
 import java.util.Map;
 
 import static org.testng.Assert.*;

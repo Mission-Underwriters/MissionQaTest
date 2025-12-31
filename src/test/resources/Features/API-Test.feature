@@ -1,27 +1,25 @@
-Feature: API test
-# Please visit https://reqres.in/
+Feature: API Automation Tests
+  # Base URL: https://reqres.in/
+  
+  Scenario: List all users on first page
+    Given I request the list of users on page 1
+    When I fetch all users across all pages
+    Then total users count should equal the number of user ids
 
-  Scenario: Should see LIST USERS of all existing users
-    Given I get the default list of users for on 1st page
-    When I get the list of all users within every page
-    Then I should see total users count equals the number of user ids
-
-
-  Scenario: Should see SINGLE USER data
-    Given I make a search for user 3
-    Then I should see the following user data
+  Scenario: Get single user data
+    Given I request user with id 3
+    Then the response should contain:
       | first_name | email               |
       | Emma       | emma.wong@reqres.in |
 
+Scenario: Single user not found
+  Given I request user with id 55
+  Then I should receive HTTP status code 403
 
-  Scenario: Should see SINGLE USER NOT FOUND error code
-    Given I make a search for user 55
-    Then I receive error code 404 in response
 
-
-  Scenario Outline: CREATE a user
-    Given I create a user with following <Name> <Job>
-    Then response should contain the following data
+  Scenario Outline: Create a new user
+    Given I create a user with name "<Name>" and job "<Job>"
+    Then the response should contain the following fields:
       | name | job | id | createdAt |
 
     Examples:
@@ -29,21 +27,21 @@ Feature: API test
       | Peter | Manager |
       | Liza  | Sales   |
 
-
-  Scenario: LOGIN - SUCCESSFUL by a user
-    Given I login unsuccessfully with the following data
+  Scenario: Login successful
+    Given I login with credentials:
       | Email              | Password   |
       | eve.holt@reqres.in | cityslicka |
-    Then I should get a response code of 200
+    Then the response status code should be 200
+    And response should contain a token
 
-  Scenario: LOGIN - UNSUCCESSFUL by a user
-    Given I login unsuccessfully with the following data
-      | Email              | Password |
-      | eve.holt@reqres.in |          |
-    Then I should get a response code of 400
-    And I should see the following response message:
-      | "error": "Missing password" |
-
-  Scenario: Should see the list of users with DELAYED RESPONSE
-    Given I wait for the user list to load
-    Then I should see that every user has a unique id
+Scenario: Login unsuccessful
+  Given I login with credentials:
+    | Email              | Password |
+    | eve.holt@reqres.in |          |
+  Then the response status code should be 400
+  And the response should contain error message:
+    | error | Missing password |
+    
+  Scenario: Delayed response user list
+    Given I request the list of users with a delay of 3 seconds
+    Then each user in the response should have a unique id
