@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="FullAutomationSuite"
+	parallel="methods">
+
+	<!-- ==================== UI Automation ==================== -->
+	<test name="UI Tests" enabled="false">
+		<parameter name="browser" value="chrome" />
+		<classes>
+			<class name="Runners.UIRunnerTest" />
+		</classes>
+	</test>
+
+	<!-- ==================== API Automation ==================== -->
+	<test name="API Tests" enabled="false">
+		<classes>
+			<class name="Runners.APIRunnerTest" />
+		</classes>
+	</test>
+
+	<!-- ==================== UI + API Automation ==================== -->
+	<test name="UI And API Test" enabled="true">
+		<parameter name="browser" value="chrome" />
+		<classes>
+			<class name="Runners.CombineRunnerTest" />
+		</classes>
+	</test>
+
+</suite>
