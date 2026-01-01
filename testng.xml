@@ -1,15 +1,9 @@
-<suite name="QA Automation Assignment" verbose="1">
+<suite name="MissionQATests" verbose="1">
 
 	<test name="SauceDemo UI-Test feature">
 		<classes>
-			<class name="mission.runner.UIRunnerTest" />
+			<class name="mission.runner.API_UI_runner" />
 		</classes>
 	</test>
-	<test name="ReqRes API-Test feature">
-		<classes>
-			<class name="mission.runner.APIRunnerTest" />
-		</classes>
-	</test>
-
 
 </suite>

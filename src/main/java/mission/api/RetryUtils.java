@@ -1,13 +1,14 @@
 package mission.api;
 
 import io.restassured.response.Response;
-
 import java.util.function.Supplier;
 
+// Utility class that retries an API call if it fails.
 public final class RetryUtils {
 
     private RetryUtils() {}
 
+    //It retries an API call until it succeeds or runs out of attempts
     public static Response retry(
             Supplier<Response> action,
             int maxAttempts,

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Failed suite [QA Automation Assignment]">
-  <test thread-count="5" name="SauceDemo UI-Test feature(failed)">
+<suite thread-count="4" parallel="tests" name="Failed suite [QA Automation Assignment]">
+  <test thread-count="4" parallel="tests" name="ReqRes API-Test feature(failed)">
     <classes>
-      <class name="mission.runner.UIRunnerTest">
+      <class name="mission.runner.APIRunnerTest">
         <methods>
           <include name="setUpClass"/>
           <include name="tearDownClass"/>
-          <include name="runScenario" invocation-numbers="0"/>
+          <include name="runScenario" invocation-numbers="9"/>
         </methods>
-      </class> <!-- mission.runner.UIRunnerTest -->
+      </class> <!-- mission.runner.APIRunnerTest -->
     </classes>
-  </test> <!-- SauceDemo UI-Test feature(failed) -->
+  </test> <!-- ReqRes API-Test feature(failed) -->
 </suite> <!-- Failed suite [QA Automation Assignment] -->

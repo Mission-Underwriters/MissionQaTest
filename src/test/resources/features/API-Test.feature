@@ -7,18 +7,15 @@ Feature: API test
     When I get the list of all users within every page
     Then I should see total users count equals the number of user ids
 
-
   Scenario: Should see SINGLE USER data
     Given I make a search for user 3
     Then I should see the following user data
       | first_name | email               |
       | Emma       | emma.wong@reqres.in |
 
-
   Scenario: Should see SINGLE USER NOT FOUND error code
     Given I make a search for user 55
     Then I receive error code 404 in response
-
 
   Scenario Outline: CREATE a user
   Given I create a user with name "<name>" and job "<job>"
@@ -47,3 +44,14 @@ Examples:
   Scenario: Should see the list of users with DELAYED RESPONSE
     Given I wait for the user list to load
     Then I should see that every user has a unique id
+    
+     Scenario: UPDATE a user
+    Given I update user 3 with the following data
+      | name | job      |
+      | John | Developer |
+    Then response should contain the updated data
+      | name | job | updatedAt |
+
+  Scenario: DELETE a user
+    Given I delete user 3
+    Then I should get a response code of 204

@@ -10,6 +10,7 @@ import org.testng.Assert;
 import java.util.List;
 import java.util.Map;
 
+// This class contains step definitions related to login API scenarios
 public class API_LoginStepDefs extends API_CommonStepDefs {
 
 	private final LoginService loginService = new LoginService(new RestClient());
@@ -32,26 +33,21 @@ public class API_LoginStepDefs extends API_CommonStepDefs {
 	@Then("I should see the following response message:")
 	public void verifyErrorMessage(DataTable table) {
 		String expected = table.asList().get(0).replace("\"", "").split(":")[1].trim();
-
 		String actual = getResponse().jsonPath().getString("error");
-
 		Assert.assertEquals(actual, expected);
 	}
-	
+
+	// Login operation. It extracts the email and password, handles empty password cases, and sends the login request.
 	private void performLogin(DataTable table) {
-	    // Get table rows
-	    List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-	    Map<String, String> data = rows.get(0); // Only one row in login scenario
+		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+		Map<String, String> data = rows.get(0);
 
-	    String email = data.get("Email"); // or normalize to "email"
-	    String password = data.get("Password");
+		String email = data.get("Email");
+		String password = data.get("Password");
 
-	    if (password != null && password.equalsIgnoreCase("[empty]")) {
-	        password = "";
-	    }
-
-	    lastResponse = loginService.login(email, password);
-	    //System.out.println("Login payload: " + lastResponse.asString());
+		if (password != null && password.equalsIgnoreCase("[empty]")) {
+			password = "";
+		}
+		lastResponse = loginService.login(email, password);
 	}
-
 }

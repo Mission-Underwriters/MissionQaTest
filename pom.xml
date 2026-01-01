@@ -119,26 +119,28 @@
 				<executions>
 					<execution>
 						<id>generate-cucumber-report</id>
-						<phase>verify</phase> <!-- runs after tests -->
+						<phase>verify</phase> <!-- keep verify -->
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<projectName>Mission QA Framework</projectName>
 							<outputDirectory>
-								${project.basedir}/target/cucumber-merged-report</outputDirectory>
+								${project.build.directory}/cucumber-merged-report</outputDirectory>
 							<jsonFiles>
 								<param>
-									${project.basedir}/target/cucumber-json/ui.json</param>
-								<param>
-									${project.basedir}/target/cucumber-json/api.json</param>
+									${project.build.directory}/cucumber-json/*.json</param>
 							</jsonFiles>
 							<buildNumber>1</buildNumber>
 							<skip>false</skip>
+							<parallelTesting>false</parallelTesting> <!--
+							important! -->
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+
 			<!-- Maven Surefire Plugin for TestNG -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

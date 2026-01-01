@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+// Utility class used to read data from a properties file.
 public class LoadProp {
 
     private static Properties prop;
@@ -12,11 +13,7 @@ public class LoadProp {
     private static final String TESTDATA_PATH = "/src/test/resources/TestData/TestData.properties";
     private static final File CURRENT_DIR = new File(System.getProperty("user.dir"));
 
-    /**
-     * Get property value from TestData.properties by key
-     * @param key The property key
-     * @return value as String
-     */
+    // Look inside the file and give me the value for key
     public static String getProperty(String key) {
         prop = new Properties();
         try {

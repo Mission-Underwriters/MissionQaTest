@@ -8,93 +8,92 @@ import org.openqa.selenium.support.FindBy;
 
 import mission.base.BasePage;
 
-public class CheckoutPage extends BasePage{
+// CheckoutPage represents the checkout section of the website.
+public class CheckoutPage extends BasePage {
 	public CheckoutPage(WebDriver driver) {
-        super(driver);
-    }
+		super(driver);
+	}
 
-    @FindBy(id = "first-name")
-    private WebElement firstName;
+	@FindBy(id = "first-name")
+	private WebElement firstName;
 
-    @FindBy(id = "last-name")
-    private WebElement lastName;
+	@FindBy(id = "last-name")
+	private WebElement lastName;
 
-    @FindBy(id = "postal-code")
-    private WebElement postalCode;
+	@FindBy(id = "postal-code")
+	private WebElement postalCode;
 
-    @FindBy(id = "continue")
-    private WebElement continueButton;
+	@FindBy(id = "continue")
+	private WebElement continueButton;
 
-    @FindBy(css = ".inventory_item_price")
-    private List<WebElement> prices;
+	@FindBy(css = ".inventory_item_price")
+	private List<WebElement> prices;
 
-    @FindBy(css = ".summary_subtotal_label")
-    private WebElement itemTotal;
+	@FindBy(css = ".summary_subtotal_label")
+	private WebElement itemTotal;
 
-    @FindBy(css = ".summary_tax_label")
-    private WebElement tax;
-    
-    @FindBy(css = ".summary_total_label")
-    private WebElement total;
+	@FindBy(css = ".summary_tax_label")
+	private WebElement tax;
 
-    @FindBy(id = "finish")
-    private WebElement finishButton;
+	@FindBy(css = ".summary_total_label")
+	private WebElement total;
 
-    @FindBy(className = "complete-header")
-    private WebElement confirmationMessage;    
-    
+	@FindBy(id = "finish")
+	private WebElement finishButton;
 
-    public void enterCheckoutInfo(String fname, String lname, String zip) {
-        if (fname != null && !fname.isEmpty()) {
-            firstName.sendKeys(fname);
-        }
-        if (lname != null && !lname.isEmpty()) {
-            lastName.sendKeys(lname);
-        }
-        if (zip != null && !zip.isEmpty()) {
-            postalCode.sendKeys(zip);
-        }
-    }
+	@FindBy(className = "complete-header")
+	private WebElement confirmationMessage;
 
-    public void clickContinue() {
-        continueButton.click();
-    }
+	// Fill out the form with the buyer’s details.
+	public void enterCheckoutInfo(String fname, String lname, String zip) {
+		if (fname != null && !fname.isEmpty()) {
+			firstName.sendKeys(fname);
+		}
+		if (lname != null && !lname.isEmpty()) {
+			lastName.sendKeys(lname);
+		}
+		if (zip != null && !zip.isEmpty()) {
+			postalCode.sendKeys(zip);
+		}
+	}
 
-    public double calculateItemTotal() {
-        double total = 0;
-        for (WebElement price : prices) {
-            total += Double.parseDouble(price.getText().replace("$", ""));
-        }
-        return total;
-    }
+	// Clicks the continue button to proceed to the next checkout step.
+	public void clickContinue() {
+		continueButton.click();
+	}
 
-    public double getItemTotalFromPage() {
-        return Double.parseDouble(
-                itemTotal.getText().replace("Item total: $", "")
-        );
-    }
+	// Add up the prices of everything in the cart.
+	public double calculateItemTotal() {
+		double total = 0;
+		for (WebElement price : prices) {
+			total += Double.parseDouble(price.getText().replace("$", ""));
+		}
+		return total;
+	}
 
-    public double getTaxFromPage() {
-        return Double.parseDouble(
-                tax.getText().replace("Tax: $", "")
-        );
-    }
-    
-    public double getTotalFromPage() {
-        return Double.parseDouble(
-                total.getText().replace("Total: $", "")
-        );
-    }
+	// Gets the item total displayed on the page.
+	public double getItemTotalFromPage() {
+		return Double.parseDouble(itemTotal.getText().replace("Item total: $", ""));
+	}
 
-    public void clickFinish() {
-        finishButton.click();
-    }
+	// Gets the tax amount displayed on the page.
+	public double getTaxFromPage() {
+		return Double.parseDouble(tax.getText().replace("Tax: $", ""));
+	}
 
-    public String getConfirmationMessage() {
-        return confirmationMessage.getText();
-    }
+	// Gets the total (item total + tax) displayed on the page.
+	public double getTotalFromPage() {
+		return Double.parseDouble(total.getText().replace("Total: $", ""));
+	}
 
-    public boolean isCheckoutComplete() {
-        return driver.getCurrentUrl().contains("checkout-complete");
-    }
+	// Click the finish button to complete the checkout process.
+	public void clickFinish() {
+		finishButton.click();
+	}
+
+	// Returns the confirmation message shown after successful checkout.
+	public String getConfirmationMessage() {
+		return confirmationMessage.getText();
+	}
+
 }

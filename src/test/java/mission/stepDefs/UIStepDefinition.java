@@ -3,180 +3,131 @@ package mission.stepDefs;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.*;
 import mission.hook.Hook;
-import mission.pages.*;
 
+// UIStepDefinition contains all the step definitions for the Cucumber tests.
 public class UIStepDefinition {
 
-	private WebDriver driver;
-
-    private LoginPage loginPage;
-    private HomePage homePage;
-    private CartPage cartPage;
-    private CheckoutPage checkoutPage;
-    
-    private List<String> itemsAdded = new ArrayList<>();
-  
-    //Initialize driver 
-    private void initPages() {
-        if (driver == null) {
-            driver = Hook.driver;
-            loginPage = new LoginPage(driver);
-            homePage = new HomePage(driver);
-            cartPage = new CartPage(driver);
-            checkoutPage = new CheckoutPage(driver);
-        }
+	// Validation for different users
+	@Given("I login with username {string} and password {string}")
+	 public void i_login_with_username_and_password(String userName, String password) {
+        Hook.loginPage.login(userName, password);
     }
+	
+	@Then("I should see {string}")
+	public void verify_login(String status) {
 
-    @Given("I am on the home page")
-    public void i_am_on_the_home_page() {
-        initPages();
-        assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/");
-    }
+	    if (status.equalsIgnoreCase("Success")) {
+	        Assert.assertTrue(
+	                Hook.loginPage.isUserLoggedIn(),
+	                "Expected login to succeed, but user is not logged in"
+	        );
+	    }
+	    else if (status.equalsIgnoreCase("Fail")) {
+	        Assert.assertTrue(
+	                Hook.loginPage.isErrorDisplayed(),
+	                "Expected login to fail, but error message was not displayed"
+	        );
+	    }
+	}
 
-    @And("I login in with the following details")
-    public void i_login_with_details(io.cucumber.datatable.DataTable dataTable) {
-        initPages();
-        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-        for (Map<String, String> row : rows) {
-            loginPage.login(row.get("userName"), row.get("Password"));
-        }
-    }
-    
-    @And("I add the following items to the basket")
-    public void i_add_items_to_basket(io.cucumber.datatable.DataTable dataTable) {
-        initPages();
-        List<String> items = new ArrayList<>();
-        for (List<String> row : dataTable.asLists(String.class)) {
-            items.add(row.get(0));
-        }
-        homePage.addItemsToCart(items);
-        itemsAdded.addAll(items);
-    }
+	
+	
+	// LOGIN STEPS
+	@Given("I am on the home page")
+	public void i_am_on_the_home_page() {
+		assertEquals(Hook.driver.getCurrentUrl(), "https://www.saucedemo.com/");
+	}
 
-    @And("I should see {int} items added to the shopping cart")
-    public void i_should_see_items_in_cart(int expectedCount) {
-        initPages();
-        assertEquals(homePage.getCartCount(), expectedCount);
-    }
+	@And("I login with the user details")
+	public void i_login_with_details(DataTable dataTable) {
+		for (Map<String, String> row : dataTable.asMaps(String.class, String.class)) {
+			Hook.homePage = Hook.loginPage.login(row.get("userName"), row.get("Password"));
+		}
+	}
 
-    @And("I click on the shopping cart")
-    public void i_click_on_shopping_cart() {
-        initPages();
-        homePage.goToCart();
-    }
+	// CART STEPS
+	@When("I add the following items to the basket")
+	@Given("I have added items to the basket")
+	public void i_add_items_to_the_basket(DataTable dataTable) {
+		List<String> items = dataTable.asList();
+		Hook.homePage.addItemsToCart(items);
+	}
 
-    @And("I verify that the QTY count for each item should be 1")
-    public void verify_quantity_for_each_item() {
-        initPages();
-        assertTrue(cartPage.verifyQuantityIsOne(), "Not all items have quantity 1");
-    }
+	@Then("I should see {int} items added to the shopping cart")
+	public void i_should_see_items_added_to_the_shopping_cart(int expectedCount) {
+		assertEquals(Hook.homePage.getCartCount(), expectedCount, "Cart count mismatch");
+	}
 
-    @And("I remove the following item:")
-    public void remove_item(io.cucumber.datatable.DataTable dataTable) {
-        initPages();
-        String itemToRemove = dataTable.asLists(String.class).get(0).get(0);
-        cartPage.removeItem(itemToRemove);
-        itemsAdded.remove(itemToRemove);
-    }
+	@And("I open the shopping cart")
+	public void i_open_the_shopping_cart() {
+		Hook.cartPage = Hook.homePage.goToCart();
+	}
 
-    @And("I click on the CHECKOUT button")
-    public void click_checkout() {
-        initPages();
-        cartPage.clickCheckout();
-    }
+	@When("I remove the following item:")
+	public void i_remove_the_following_item(DataTable dataTable) {
+		String itemToRemove = dataTable.asList().get(0);
+		Hook.cartPage.removeItem(itemToRemove);
+	}
 
-    @And("I type {string} for First Name")
-    public void type_first_name(String firstName) {
-        initPages();
-        checkoutPage.enterCheckoutInfo(firstName, "", "");
-    }
+	@Then("quantity for each item should be 1")
+	public void quantity_for_each_item_should_be_one() {
+		assertTrue(Hook.cartPage.verifyQuantityIsOne(), "Quantity is not 1 for all items");
+	}
 
-    @And("I type {string} for Last Name")
-    public void type_last_name(String lastName) {
-        initPages();
-        checkoutPage.enterCheckoutInfo("", lastName, "");
-    }
+	// CHECKOUT STEPS
 
-    @And("I type {string} for ZIP\\/Postal Code")
-    public void type_zip(String zip) {
-        initPages();
-        checkoutPage.enterCheckoutInfo("", "", zip);
-    }
+	@And("I proceed to checkout")
+	public void i_proceed_to_checkout() {
+		Hook.checkoutPage = Hook.cartPage.clickCheckout();
+	}
 
-    @When("I click on the CONTINUE button")
-    public void click_continue() {
-        initPages();
-        checkoutPage.clickContinue();
-    }
+	@And("I enter checkout information with First Name {string}, Last Name {string}, and ZIP {string}")
+	public void i_enter_checkout_information(String firstName, String lastName, String zip) {
+		Hook.checkoutPage.enterCheckoutInfo(firstName, lastName, zip);
+	}
 
-    @Then("Item total will be equal to the total of items on the list")
-    public void verify_item_total() {
-        initPages();
-        double calculatedTotal = checkoutPage.calculateItemTotal();
-        double displayedTotal = checkoutPage.getItemTotalFromPage();
-        assertEquals(displayedTotal, calculatedTotal, 0.01);
-    }
+	@When("I continue checkout")
+	public void i_continue_checkout() {
+		Hook.checkoutPage.clickContinue();
+	}
 
-    @Then("a Tax rate of 8 % is applied to the total")
-    public void verify_tax_rate() {
-        initPages();
-        double calculatedTotal = checkoutPage.calculateItemTotal();
-        double expectedTax = Math.round(calculatedTotal * 0.08 * 100.0) / 100.0;
-        double displayedTax = checkoutPage.getTaxFromPage();
-        assertEquals(displayedTax, expectedTax, 0.01);
-    }
-    
-    @And("the total amount should be equal to item total plus tax")
-    public void verify_total_amount() {
-        initPages();
+	// PRICE & TAX VALIDATIONS
+	@Then("item total should match sum of item prices")
+	public void item_total_should_match_sum_of_item_prices() {
+		assertEquals(Hook.checkoutPage.getItemTotalFromPage(), Hook.checkoutPage.calculateItemTotal(), 0.01,
+				"Item total does not match calculated total");
+	}
 
-        double itemTotal = checkoutPage.getItemTotalFromPage();
-        double tax = checkoutPage.getTaxFromPage();
-        double total = checkoutPage.getTotalFromPage();
+	@Then("tax should be calculated at {int} percent")
+	public void tax_should_be_calculated_at_percent(int taxRate) {
+		double expectedTax = Math.round(Hook.checkoutPage.calculateItemTotal() * taxRate / 100 * 100.0) / 100.0;
+		assertEquals(Hook.checkoutPage.getTaxFromPage(), expectedTax, 0.01, "Tax amount is incorrect");
+	}
 
-        assertEquals(total, itemTotal + tax, 0.01,
-                "Total amount is not equal to item total + tax");
-    }
+	@Then("total amount should be item total plus tax")
+	public void total_amount_should_be_item_total_plus_tax() {
+		double expectedTotal = Hook.checkoutPage.getItemTotalFromPage() + Hook.checkoutPage.getTaxFromPage();
+		assertEquals(Hook.checkoutPage.getTotalFromPage(), expectedTotal, 0.01, "Total amount is incorrect");
+	}
 
-    @And("I click on the FINISH button")
-    public void click_finish_button() {
-        initPages();
-        checkoutPage.clickFinish();
-    }
+	// ORDER COMPLETION
 
-    @Then("I should see the order confirmation message")
-    public void verify_order_confirmation_message() {
-        initPages();
-        assertTrue(
-                checkoutPage.getConfirmationMessage().contains("Thank you for your order!"),
-                "Order confirmation message not displayed"
-        );
-    }
+	@When("I finish checkout")
+	public void i_finish_checkout() {
+		Hook.checkoutPage.clickFinish();
+	}
 
-    @And("the checkout should be completed successfully")
-    public void verify_checkout_completed() {
-        initPages();
-        assertTrue(
-                checkoutPage.isCheckoutComplete(),
-                "Checkout is not completed successfully"
-        );
-    }
-
-    @And("the shopping cart should be empty")
-    public void verify_cart_is_empty() {
-        initPages();
-        assertEquals(cartPage.getItemCount(), 0,
-                "Shopping cart is not empty after checkout");
-    }
+	@Then("I should see the order confirmation message")
+	public void i_should_see_the_order_confirmation_message() {
+		assertTrue(Hook.checkoutPage.getConfirmationMessage().contains("Thank you for your order!"),
+				"Order confirmation message not displayed");
+	}
 }
