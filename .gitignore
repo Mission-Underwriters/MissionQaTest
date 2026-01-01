@@ -1,0 +1,22 @@
+# Maven target directory
+/target/
+ 
+# Eclipse files
+.classpath
+.project
+.settings/
+.metadata/
+ 
+# TestNG / Cucumber outputs
+/test-output/
+/logs/
+/screenshots/
+
+# Environment 
+/TestData.properties
+ 
+# Archives / compressed files
+*.zip
+*.tar.gz
+*.rar
+ 
