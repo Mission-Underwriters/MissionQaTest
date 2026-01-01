@@ -1,0 +1,9 @@
+<suite name="MissionQATests" verbose="1">
+
+	<test name="SauceDemo UI-Test feature">
+		<classes>
+			<class name="mission.runner.API_UI_runner" />
+		</classes>
+	</test>
+
+</suite>
