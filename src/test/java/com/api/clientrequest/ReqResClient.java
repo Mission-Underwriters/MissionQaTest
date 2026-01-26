@@ -1,4 +1,4 @@
-package com.api.client;
+package com.api.clientrequest;
 
 import com.api.pojo.CreateRecord;
 import io.restassured.RestAssured;

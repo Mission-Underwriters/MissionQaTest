@@ -20,19 +20,36 @@ public class StepDefinition {
     public void iGetTheDefaultListofusers() {
         response = client.getUsersByPage(1);
 
+        response.then().statusCode(200);
+
+        totalUsersFromApi = response.jsonPath().getInt("total");
+
+        List<Integer> ids = response.jsonPath().getList("data.id");
+        allUserIds.addAll(ids);
+
     }
 
     @When("I get the list of all users within every page")
     public void iGetTheListOfAllUsers() {
-        response = client.getUsersByPage(2);
-    }
+        int totalPages = response.jsonPath().getInt("total_pages");
 
-    @Then("I should see total users count equals the number of user ids")
-    public void iShouldMatchTotalCount() {
-        List<Integer> ids = response.jsonPath().getList("data.id");
-        assertEquals(ids.size(), new HashSet<>(ids).size());
+        for (int page = 2; page <= totalPages; page++) {
+            Response pageResponse = client.getUsersByPage(page);
+            pageResponse.then().statusCode(200);
 
+            List<Integer> ids = pageResponse.jsonPath().getList("data.id");
+            allUserIds.addAll(ids);
+        }
     }
+        @Then("I should see total users count equals the number of user ids")
+        public void iShouldMatchTotalCount() {
+
+            Assert.assertEquals(
+                    allUserIds.size(),
+                    totalUsersFromApi,
+                    "Total users count does not match collected user IDs"
+            );
+        }
 
     @Given("I make a search for user (.*)")
     public void iMakeASearchForUser(String sUserID) {

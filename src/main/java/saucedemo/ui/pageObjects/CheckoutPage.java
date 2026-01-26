@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
  * @author myname
  */
 public class CheckoutPage {
+    WebDriver driver;
     ;
 
     public CheckoutPage(WebDriver driver){
@@ -33,7 +34,7 @@ public class CheckoutPage {
   public void enterDetails(String fName, String lName, String zip) {
       firstName.sendKeys(fName);
       lastName.sendKeys(lName);
-      postalCode.sendKeys(zip);
+      postalcode.sendKeys(zip);
       continueBtn.click();
   }
 }
