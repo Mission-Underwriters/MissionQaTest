@@ -5,9 +5,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
+
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BrowserSetup extends BasePage {
 
@@ -17,22 +19,25 @@ public class BrowserSetup extends BasePage {
     private static final String FIREFOX_WIN = "src\\test\\java\\BrowserDirectory\\geckodriver.exe";
     private static final String CHROME_MAC = "src/test/java/BrowserDirectory/chromedriver-Mac";
 
-
-    /**
-     * Browser property location /src/test/java/TestData/TestData.properties
-     */
-
-
-    /**
-     * Function for multi browser
-     */
     public void selectBrowser() {
         browser = LoadProp.getProperty("Browser");
 
         if (browser.equalsIgnoreCase("Chrome")) {
             //System.setProperty("webdriver.chrome.driver", CHROME_WIN);
+            ChromeOptions options = new ChromeOptions();
+            Map<String, Object> prefs = new HashMap<>();
+            prefs.put("credentials_enable_service", false);
+            prefs.put("profile.password_manager_enabled", false);
+            prefs.put("profile.password_manager_leak_detection", false);
+
+            options.setExperimentalOption("prefs", prefs);
+
+// Optional but helps reduce Chrome noise
+            options.addArguments("--disable-notifications");
+            options.addArguments("--disable-infobars");
             WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
+            driver = new ChromeDriver(options);
+
         } else if (browser.equalsIgnoreCase("edge")) {
             //System.setProperty("webdriver.edge.driver", EDGE);
             WebDriverManager.edgedriver().setup();
@@ -53,8 +58,11 @@ public class BrowserSetup extends BasePage {
             driver = new ChromeDriver(chromeOptions);
         } else if (browser.equalsIgnoreCase("api")) {
 
-        } else {
-            Assert.fail(MessageFormat.format("Wrong Browser: {0}", browser));
+        }else {
+            throw new RuntimeException(
+                    MessageFormat.format("Wrong Browser: {0}", browser)
+            );
         }
+
     }
 }

@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="MissionQA" />
+        <module name="MissionQaTest-master" />
       </profile>
     </annotationProcessing>
   </component>
