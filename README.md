@@ -41,5 +41,15 @@ The following folder `src/main/java/AutomationTest/mission` contains the followi
     - We may need to import the Maven dependencies (Scope got set to Compile for Newly added dependencies in pom.xml)
     - Execute the command: `mvn clean test`
     - Alternatively, we can run `testng.xml` from IDE after downloading the dependencies
-    - Result will be captured in `test-output` folder
 
+
+## Implementation Notes
+
+- Test execution results and reports are available inside the `target` directory after execution.
+- The project uses Cucumber with TestNG and Selenium/Rest-Assured for UI and API automation.
+
+## Notes
+- While testing Reqres public APIs using Rest-Assured, some endpoints returned HTTP 403.
+- This is due to Reqres server-side restrictions on automated requests.
+- Standard headers (User-Agent, Accept, Content-Type) were added to resolve this.
+- API endpoints were verified manually via browser and Reqres API documentation.

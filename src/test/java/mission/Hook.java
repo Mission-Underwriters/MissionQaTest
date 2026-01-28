@@ -1,8 +1,9 @@
 package mission;
 
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.OutputType;
@@ -20,20 +21,21 @@ public class Hook extends BasePage {
     private static final int WAIT_SEC = 20;
 
 
-    @Before()
+    @Before("@Ui")
     public void initializeTest() {
         browsersetup.selectBrowser();
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().pageLoadTimeout(WAIT_SEC, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(WAIT_SEC, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(WAIT_SEC, TimeUnit.SECONDS);
-        new iniClass();
+//        new iniClass();
+        driver.get(LoadProp.getProperty("url"));
     }
 
     /**
      * Executed after each UI tagged scenario
      */
-    @After()
+    @After("@Ui")
     public void screenshot(Scenario scenario) {
         String screenShotFilename = scenario.getName().replace(" ", "")
                 + new Timestamp(new Date().getTime()).toString().replaceAll("[^a-zA-Z0-9]", "")
