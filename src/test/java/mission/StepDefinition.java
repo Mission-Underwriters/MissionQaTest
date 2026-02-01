@@ -16,8 +16,9 @@ public class StepDefinition {
         HomePage.homePage();
     }
 
-    @Given("^I get the default list of users for on 1st page$")
-    public void iGetTheDefaultListofusers() {
+    @Given("^I get the default list of users for on (\\d+)st page$")
+
+    public void i_get_the_default_list_of_users_for_on_st_page() {
         response = client.getUsersByPage(1);
 
         response.then().statusCode(200);
