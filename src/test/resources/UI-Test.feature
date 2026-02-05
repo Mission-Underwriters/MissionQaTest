@@ -27,5 +27,7 @@ Feature: Checkout items in the basket
     When I click on the CONTINUE button
     Then Item total will be equal to the total of items on the list
     And a Tax rate of 8 % is applied to the total
+    And response should contain the following data
+
 
 
