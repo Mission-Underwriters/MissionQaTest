@@ -1,4 +1,4 @@
-package mission;
+package mission.driver;
 
 import org.openqa.selenium.WebDriver;
 
